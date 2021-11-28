@@ -4,6 +4,11 @@ provider "google" {
   zone = "asia-southeast1-a"
 }
 
+resource "google_compute_global_address" "default" {
+  name = "global-appserver-ip"
+  address = "34.117.42.9"
+}
+
 resource "google_compute_instance" "vm_instance" {
   name = "terraform-instance"
   machine_type = "f1-micro"
@@ -17,7 +22,7 @@ resource "google_compute_instance" "vm_instance" {
   network_interface {
     network = "default"
     access_config {
-
+      nat_ip = google_compute_global_address.default.address
     }
   }
 }
